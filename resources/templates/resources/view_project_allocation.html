@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Project Allocation: {{ project.name }}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Resource</th>
+                <th>Percentage Allocation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for allocation in allocations %}
+                <tr>
+                    <td>{{ allocation.resource.name }}</td>
+                    <td>{{ allocation.percentage_allocation }}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

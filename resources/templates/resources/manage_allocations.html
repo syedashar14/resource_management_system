@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resource Management System - Manage Allocations</title>
+</head>
+<body>
+    <h1>Resource Management System - Manage Allocations</h1>
+    
+    <h2>Resources</h2>
+    <form method="post">
+        {% csrf_token %}
+        <select name="resource">
+            {% for resource in resources %}
+                <option value="{{ resource.id }}">{{ resource.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <h2>Projects</h2>
+        <select name="project">
+            {% for project in projects %}
+                <option value="{{ project.id }}">{{ project.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <h2>Percentage Allocation</h2>
+        <input type="text" name="percentage" />
+        
+        <button type="submit">Allocate</button>
+    </form>
+    
+    <h2>Allocations</h2>
+    <ul>
+        {% for allocation in allocations %}
+            <li>{{ allocation.resource.name }} - {{ allocation.project.name }} ({{ allocation.percentage_allocation }}%)</li>
+        {% empty %}
+            <li>No allocations found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+{% endblock %}

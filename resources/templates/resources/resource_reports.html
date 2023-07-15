@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Resource Reports</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Total Allocation</th>
+                <th>View Allocation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resource in resources %}
+            <tr>
+                <td>{{ resource.name }}</td>
+                <td>{{ resource.total_allocation|default:0 }}%</td>
+                <td>
+                    <a href="{% url 'resources:view_allocation' resource.id %}" class="btn btn-primary">View Allocation</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

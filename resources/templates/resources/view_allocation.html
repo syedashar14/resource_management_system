@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>View Allocation</h2>
+    <h3>Resource: {{ resource.name }}</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Allocation Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for allocation in allocations %}
+                    <tr>
+                        <td>{{ allocation.project.name }}</td>
+                        <td>{{ allocation.percentage_allocation }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total Allocation</td>
+                        <td>{{ total_allocation_percentage }}%</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <a href="{% url 'resources:view_allocation' next_resource_id %}" class="btn btn-primary {% if not has_next_resource %}disabled{% endif %}">Next</a>
+
+        </div>
+        <div class="col-md-6">
+            <canvas id="allocationChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('allocationChart').getContext('2d');
+            var labels = [];
+            var data = [];
+            var colors = [];
+            {% for allocation in allocations %}
+                labels.push("{{ allocation.project.name }}");
+                data.push({{ allocation.percentage_allocation }});
+                colors.push(getRandomColor());
+            {% endfor %}
+            var allocationChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        });
+    </script>
+{% endblock %}
